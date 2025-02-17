@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Repeat } from "lucide-react";
 import Image from "next/image";
 
-// URLs for fetching token prices and icons.
+// Adjust to your actual data endpoints/icons:
 const API_URL = "https://interview.switcheo.com/prices.json";
 const ICONS_URL =
   "https://raw.githubusercontent.com/Switcheo/token-icons/main/tokens/";
 
-export default function DarkBrightGlassSwap() {
-  // Token and price states.
+export default function PurpleGlassSwap() {
+  // Token & price states
   const [tokens, setTokens] = useState<string[]>([]);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
   const [fromToken, setFromToken] = useState("");
@@ -19,17 +19,17 @@ export default function DarkBrightGlassSwap() {
   const [amount, setAmount] = useState("");
   const [convertedAmount, setConvertedAmount] = useState(0);
 
-  // Dropdown state and search inputs.
+  // Dropdown states
   const [isFromOpen, setIsFromOpen] = useState(false);
   const [isToOpen, setIsToOpen] = useState(false);
   const [fromSearch, setFromSearch] = useState("");
   const [toSearch, setToSearch] = useState("");
 
-  // Refs for closing dropdowns on outside click.
+  // Refs for closing dropdowns on outside click
   const fromDropdownRef = useRef<HTMLDivElement>(null);
   const toDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fetch token prices on mount.
+  // Fetch token prices on mount
   useEffect(() => {
     fetch(API_URL)
       .then((res) => res.json())
@@ -50,7 +50,7 @@ export default function DarkBrightGlassSwap() {
       });
   }, []);
 
-  // Update conversion result.
+  // Recalculate conversion
   useEffect(() => {
     if (
       amount &&
@@ -67,7 +67,7 @@ export default function DarkBrightGlassSwap() {
     }
   }, [amount, fromToken, toToken, prices]);
 
-  // Close dropdowns on outside click.
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -84,10 +84,12 @@ export default function DarkBrightGlassSwap() {
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
-  // Swap tokens.
+  // Swap tokens
   const handleSwap = () => {
     setIsFromOpen(false);
     setIsToOpen(false);
@@ -96,7 +98,7 @@ export default function DarkBrightGlassSwap() {
     setToToken(oldFrom);
   };
 
-  // Handlers for selecting tokens.
+  // Handlers for selecting tokens
   const handleSelectFrom = (token: string) => {
     setFromToken(token);
     setIsFromOpen(false);
@@ -109,7 +111,7 @@ export default function DarkBrightGlassSwap() {
     setToSearch("");
   };
 
-  // Filter token list for dropdowns.
+  // Filter tokens
   const filteredFromTokens = tokens.filter((token) =>
     token.toLowerCase().includes(fromSearch.toLowerCase())
   );
@@ -121,45 +123,45 @@ export default function DarkBrightGlassSwap() {
     <div
       className="
         relative min-h-screen flex items-center justify-center
-        bg-gradient-to-br from-[#1f1f1f] via-[#2a2a2a] to-[#242424]
+        bg-gradient-to-br from-[#1b0125] via-[#2a003e] to-[#3c0055]
         overflow-hidden
       "
     >
       {/* Floating decorative blobs */}
       <div
         className="
-          absolute -top-32 -left-32 w-[400px] h-[400px]
-          bg-[#3a3a3a] rounded-full blur-3xl opacity-50
+          absolute -top-40 -left-40 w-[500px] h-[500px]
+          bg-pink-500 rounded-full blur-3xl opacity-30
         "
       />
       <div
         className="
-          absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px]
-          bg-[#3a3a3a] rounded-full blur-3xl opacity-50
+          absolute bottom-[-150px] right-[-150px] w-[500px] h-[500px]
+          bg-purple-500 rounded-full blur-3xl opacity-30
         "
       />
 
-      {/* Glass container */}
+      {/* Glass Container */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         className="
           relative z-10 w-[400px] max-w-full
-          bg-gray-800/40 backdrop-blur-lg backdrop-saturate-150
-          border border-gray-700/50 rounded-2xl shadow-xl p-6
+          bg-white/10 backdrop-blur-xl backdrop-saturate-200
+          border border-white/10 rounded-3xl shadow-2xl p-8
         "
       >
         <h2 className="text-2xl text-white text-center font-semibold mb-6">
           Currency Swap
         </h2>
 
-        {/* Swap Input Section */}
+        {/* Swap Input */}
         <div className="space-y-2 mb-4">
-          <label className="text-gray-300">Swap</label>
+          <label className="text-gray-200">Swap</label>
           <div
             className="
-              flex items-center bg-gray-800/40 rounded-xl px-4 py-2
+              flex items-center bg-white/10 rounded-xl px-4 py-2
             "
           >
             <input
@@ -167,12 +169,12 @@ export default function DarkBrightGlassSwap() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               className="
-                flex-1 bg-transparent text-white placeholder-gray-400
+                flex-1 bg-transparent text-white placeholder-gray-300
                 outline-none text-lg
               "
               placeholder="0.00"
             />
-            {/* From Token Dropdown Button */}
+            {/* FROM dropdown button */}
             <div className="relative ml-2" ref={fromDropdownRef}>
               <button
                 onClick={() => {
@@ -180,9 +182,9 @@ export default function DarkBrightGlassSwap() {
                   setIsToOpen(false);
                 }}
                 className="
-                  flex items-center space-x-2 bg-gray-800/40
+                  flex items-center space-x-2 bg-white/20
                   px-3 py-2 rounded-lg focus:outline-none
-                  hover:bg-gray-800/60 transition-colors
+                  hover:bg-white/30 transition-colors
                 "
               >
                 {fromToken && (
@@ -198,17 +200,19 @@ export default function DarkBrightGlassSwap() {
                   {fromToken || "Select"}
                 </span>
               </button>
+
+              {/* Animated FROM dropdown */}
               <AnimatePresence>
                 {isFromOpen && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    initial={{ opacity: 0, scale: 0.95, y: -5 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -5 }}
                     transition={{ duration: 0.2 }}
                     className="
                       absolute right-0 mt-2
-                      bg-gray-800/40 backdrop-blur-lg backdrop-saturate-150
-                      border border-gray-700/50 rounded-xl shadow-lg
+                      bg-white/10 backdrop-blur-xl backdrop-saturate-200
+                      border border-white/10 rounded-xl shadow-xl
                       z-50 min-w-[150px] max-h-40 overflow-y-auto
                       custom-scrollbar p-2
                     "
@@ -219,9 +223,9 @@ export default function DarkBrightGlassSwap() {
                       value={fromSearch}
                       onChange={(e) => setFromSearch(e.target.value)}
                       className="
-                        w-full p-2 mb-2 rounded bg-gray-800/40 text-white
-                        placeholder-gray-400 focus:outline-none
-                        focus:bg-gray-800/60
+                        w-full p-2 mb-2 rounded bg-white/20 text-white
+                        placeholder-gray-300 focus:outline-none
+                        focus:bg-white/30
                       "
                     />
                     {filteredFromTokens.map((token) => (
@@ -230,7 +234,7 @@ export default function DarkBrightGlassSwap() {
                         onClick={() => handleSelectFrom(token)}
                         className="
                           flex items-center w-full p-2
-                          rounded-lg hover:bg-gray-800/60 transition-colors
+                          rounded-lg hover:bg-white/20 transition-colors
                         "
                       >
                         <Image
@@ -256,15 +260,15 @@ export default function DarkBrightGlassSwap() {
           className="cursor-pointer mb-4"
           onClick={handleSwap}
         >
-          <Repeat className="mx-auto text-gray-300" size={24} />
+          <Repeat className="mx-auto text-gray-200" size={24} />
         </motion.div>
 
-        {/* Get Output Section */}
+        {/* Get Output */}
         <div className="space-y-2">
-          <label className="text-gray-300">Get</label>
+          <label className="text-gray-200">Get</label>
           <div
             className="
-              flex items-center bg-gray-800/40 rounded-xl px-4 py-2
+              flex items-center bg-white/10 rounded-xl px-4 py-2
             "
           >
             <input
@@ -276,7 +280,7 @@ export default function DarkBrightGlassSwap() {
                 outline-none text-lg
               "
             />
-            {/* To Token Dropdown Button */}
+            {/* TO dropdown button */}
             <div className="relative ml-2" ref={toDropdownRef}>
               <button
                 onClick={() => {
@@ -284,9 +288,9 @@ export default function DarkBrightGlassSwap() {
                   setIsFromOpen(false);
                 }}
                 className="
-                  flex items-center space-x-2 bg-gray-800/40
+                  flex items-center space-x-2 bg-white/20
                   px-3 py-2 rounded-lg focus:outline-none
-                  hover:bg-gray-800/60 transition-colors
+                  hover:bg-white/30 transition-colors
                 "
               >
                 {toToken && (
@@ -302,17 +306,19 @@ export default function DarkBrightGlassSwap() {
                   {toToken || "Select"}
                 </span>
               </button>
+
+              {/* Animated TO dropdown */}
               <AnimatePresence>
                 {isToOpen && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    initial={{ opacity: 0, scale: 0.95, y: -5 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -5 }}
                     transition={{ duration: 0.2 }}
                     className="
                       absolute right-0 mt-2
-                      bg-gray-800/40 backdrop-blur-lg backdrop-saturate-150
-                      border border-gray-700/50 rounded-xl shadow-lg
+                      bg-white/10 backdrop-blur-xl backdrop-saturate-200
+                      border border-white/10 rounded-xl shadow-xl
                       z-50 min-w-[150px] max-h-40 overflow-y-auto
                       custom-scrollbar p-2
                     "
@@ -323,9 +329,9 @@ export default function DarkBrightGlassSwap() {
                       value={toSearch}
                       onChange={(e) => setToSearch(e.target.value)}
                       className="
-                        w-full p-2 mb-2 rounded bg-gray-800/40 text-white
-                        placeholder-gray-400 focus:outline-none
-                        focus:bg-gray-800/60
+                        w-full p-2 mb-2 rounded bg-white/20 text-white
+                        placeholder-gray-300 focus:outline-none
+                        focus:bg-white/30
                       "
                     />
                     {filteredToTokens.map((token) => (
@@ -334,7 +340,7 @@ export default function DarkBrightGlassSwap() {
                         onClick={() => handleSelectTo(token)}
                         className="
                           flex items-center w-full p-2
-                          rounded-lg hover:bg-gray-800/60 transition-colors
+                          rounded-lg hover:bg-white/20 transition-colors
                         "
                       >
                         <Image
