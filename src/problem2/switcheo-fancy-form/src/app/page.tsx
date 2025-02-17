@@ -161,11 +161,11 @@ export default function PurpleGlassSwap() {
               className="
                 flex-1 bg-transparent text-white placeholder-gray-300
                 outline-none text-2xl max-w-[200px]
-                [appearance:textfield]
+                [appearance:textfield] mr-2
                 [&::-webkit-inner-spin-button]:appearance-none
                 [&::-webkit-outer-spin-button]:appearance-none
               "
-              placeholder="0.00"
+              placeholder="0"
             />
             {/* FROM dropdown button */}
             <div className="relative" ref={fromDropdownRef}>
@@ -175,7 +175,7 @@ export default function PurpleGlassSwap() {
                   setIsToOpen(false);
                 }}
                 className="
-                  flex items-center space-x-3 bg-white/20
+                  flex items-center space-x-2 bg-white/20
                   pr-10 pl-3 py-3 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
                   w-auto
@@ -279,7 +279,7 @@ export default function PurpleGlassSwap() {
               readOnly
               className="
                 flex-1 bg-transparent text-white
-                outline-none text-2xl max-w-[200px]
+                outline-none text-2xl max-w-[200px] mr-2
               "
             />
             {/* TO dropdown button */}
@@ -290,7 +290,7 @@ export default function PurpleGlassSwap() {
                   setIsFromOpen(false);
                 }}
                 className="
-                  flex items-center space-x-3 bg-white/20
+                  flex items-center space-x-2 bg-white/20
                   pr-10 pl-3 py-3 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
                   w-auto
