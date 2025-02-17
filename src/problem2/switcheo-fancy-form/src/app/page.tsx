@@ -5,32 +5,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Repeat } from "lucide-react";
 import Image from "next/image";
 
-// Adjust to your actual data endpoints/icons:
 const API_URL = "https://interview.switcheo.com/prices.json";
 const ICONS_URL =
   "https://raw.githubusercontent.com/Switcheo/token-icons/main/tokens/";
 
 export default function PurpleGlassSwap() {
-  // Token & price states
   const [tokens, setTokens] = useState<string[]>([]);
   const [prices, setPrices] = useState<{ [key: string]: number }>({});
   const [fromToken, setFromToken] = useState("");
   const [toToken, setToToken] = useState("");
   const [amount, setAmount] = useState("");
   const [convertedAmount, setConvertedAmount] = useState(0);
-  const [rotation, setRotation] = useState(0); // new state for rotation
+  const [rotation, setRotation] = useState(0);
 
-  // Dropdown states
   const [isFromOpen, setIsFromOpen] = useState(false);
   const [isToOpen, setIsToOpen] = useState(false);
   const [fromSearch, setFromSearch] = useState("");
   const [toSearch, setToSearch] = useState("");
 
-  // Refs for closing dropdowns on outside click
   const fromDropdownRef = useRef<HTMLDivElement>(null);
   const toDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fetch token prices on mount
   useEffect(() => {
     fetch(API_URL)
       .then((res) => res.json())
@@ -51,7 +46,6 @@ export default function PurpleGlassSwap() {
       });
   }, []);
 
-  // Recalculate conversion
   useEffect(() => {
     if (
       amount &&
@@ -68,7 +62,6 @@ export default function PurpleGlassSwap() {
     }
   }, [amount, fromToken, toToken, prices]);
 
-  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -90,7 +83,6 @@ export default function PurpleGlassSwap() {
     };
   }, []);
 
-  // Swap tokens and update rotation state
   const handleSwap = () => {
     setIsFromOpen(false);
     setIsToOpen(false);
@@ -100,7 +92,6 @@ export default function PurpleGlassSwap() {
     setRotation((prev) => prev + 180);
   };
 
-  // Handlers for selecting tokens
   const handleSelectFrom = (token: string) => {
     setFromToken(token);
     setIsFromOpen(false);
@@ -113,7 +104,6 @@ export default function PurpleGlassSwap() {
     setToSearch("");
   };
 
-  // Filter tokens
   const filteredFromTokens = tokens.filter((token) =>
     token.toLowerCase().includes(fromSearch.toLowerCase())
   );
@@ -129,7 +119,6 @@ export default function PurpleGlassSwap() {
         overflow-hidden
       "
     >
-      {/* Floating decorative blobs */}
       <div
         className="
           absolute -top-40 -left-40 w-[500px] h-[500px]
@@ -143,27 +132,26 @@ export default function PurpleGlassSwap() {
         "
       />
 
-      {/* Glass Container */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         className="
-          relative z-10 w-[420px] max-w-full
+          relative z-10 w-[460px] max-w-full
           bg-white/10 backdrop-blur-xl backdrop-saturate-200
           border border-white/10 rounded-3xl shadow-2xl p-8
         "
       >
-        <h2 className="text-2xl text-white text-center font-semibold mb-6">
+        <h2 className="text-3xl text-white text-center font-semibold mb-8">
           Currency Swap
         </h2>
 
         {/* Swap Input */}
-        <div className="space-y-2 mb-4">
-          <label className="text-gray-200">Send</label>
+        <div className="space-y-3 mb-6">
+          <label className="text-gray-200 text-xl">Swap</label>
           <div
             className="
-              flex items-center bg-white/10 rounded-xl px-4 py-2
+              flex items-center bg-white/10 rounded-xl px-6 py-5
             "
           >
             <input
@@ -172,7 +160,7 @@ export default function PurpleGlassSwap() {
               onChange={(e) => setAmount(e.target.value)}
               className="
                 flex-1 bg-transparent text-white placeholder-gray-300
-                outline-none text-lg
+                outline-none text-2xl
                 [appearance:textfield]
                 [&::-webkit-inner-spin-button]:appearance-none
                 [&::-webkit-outer-spin-button]:appearance-none
@@ -187,28 +175,27 @@ export default function PurpleGlassSwap() {
                   setIsToOpen(false);
                 }}
                 className="
-                  flex items-center space-x-2 bg-white/20
-                  px-4 py-2 rounded-lg focus:outline-none
+                  flex items-center space-x-3 bg-white/20
+                  pr-10 pl-3 py-3 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
-                  w-[100px]
+                  w-auto
                 "
               >
                 <Image
                   src={`${ICONS_URL}${fromToken}.svg`}
                   alt={fromToken}
-                  width={20}
-                  height={20}
+                  width={28}
+                  height={28}
                   className="shrink-0"
                   onError={(e) => {
                     e.currentTarget.src = "/warning.svg";
                   }}
                 />
-                <span className="text-white text-sm max-w-[110px] truncate">
+                <span className="text-white text-lg whitespace-nowrap">
                   {fromToken || "Select"}
                 </span>
               </button>
 
-              {/* Animated FROM dropdown */}
               <AnimatePresence>
                 {isFromOpen && (
                   <motion.div
@@ -218,12 +205,12 @@ export default function PurpleGlassSwap() {
                     transition={{ duration: 0.2 }}
                     style={{ backgroundColor: "rgba(129, 90, 159)" }}
                     className="
-                      absolute right-0 mt-2
-                      backdrop-blur-2xl      
+                      absolute left-0 mt-2
+                      backdrop-blur-2xl
                       backdrop-saturate-150
                       border border-white/10 rounded-xl shadow-xl
-                      z-50 min-w-[180px] max-h-40 overflow-y-auto
-                      custom-scrollbar p-2
+                      z-50 min-w-[200px] max-h-52 overflow-y-auto
+                      custom-scrollbar p-3
                     "
                   >
                     <input
@@ -232,9 +219,9 @@ export default function PurpleGlassSwap() {
                       value={fromSearch}
                       onChange={(e) => setFromSearch(e.target.value)}
                       className="
-                        w-full p-2 mb-2 rounded bg-white/20 text-white
+                        w-full p-3 mb-3 rounded bg-white/20 text-white
                         placeholder-gray-300 focus:outline-none
-                        focus:bg-white/30
+                        focus:bg-white/30 text-lg
                       "
                     />
                     {filteredFromTokens.map((token) => (
@@ -242,21 +229,21 @@ export default function PurpleGlassSwap() {
                         key={token}
                         onClick={() => handleSelectFrom(token)}
                         className="
-                          flex items-center w-full p-2
+                          flex items-center w-full p-3
                           rounded-lg hover:bg-white/30 transition-colors
                         "
                       >
                         <Image
                           src={`${ICONS_URL}${token}.svg`}
                           alt={token}
-                          width={20}
-                          height={20}
+                          width={28}
+                          height={28}
                           className="shrink-0"
                           onError={(e) => {
                             e.currentTarget.src = "/warning.svg";
                           }}
                         />
-                        <span className="ml-2 text-white text-sm max-w-[110px] truncate">
+                        <span className="ml-3 text-white text-lg whitespace-nowrap">
                           {token}
                         </span>
                       </button>
@@ -268,22 +255,22 @@ export default function PurpleGlassSwap() {
           </div>
         </div>
 
-        {/* Swap Icon with smoother 180° spin animation */}
+        {/* Swap Icon */}
         <motion.div
           animate={{ rotate: rotation }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="cursor-pointer mb-4"
+          className="cursor-pointer mb-6"
           onClick={handleSwap}
         >
-          <Repeat className="mx-auto text-gray-200" size={24} />
+          <Repeat className="mx-auto text-gray-200" size={32} />
         </motion.div>
 
         {/* Get Output */}
-        <div className="space-y-2">
-          <label className="text-gray-200">Receive</label>
+        <div className="space-y-3">
+          <label className="text-gray-200 text-xl">Get</label>
           <div
             className="
-              flex items-center bg-white/10 rounded-xl px-4 py-2
+              flex items-center bg-white/10 rounded-xl px-6 py-5
             "
           >
             <input
@@ -292,7 +279,7 @@ export default function PurpleGlassSwap() {
               readOnly
               className="
                 flex-1 bg-transparent text-white
-                outline-none text-lg
+                outline-none text-2xl
               "
             />
             {/* TO dropdown button */}
@@ -303,28 +290,27 @@ export default function PurpleGlassSwap() {
                   setIsFromOpen(false);
                 }}
                 className="
-                  flex items-center space-x-2 bg-white/20
-                  px-4 py-2 rounded-lg focus:outline-none
+                  flex items-center space-x-3 bg-white/20
+                  pr-10 pl-3 py-3 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
-                  w-[100px]
+                  w-auto
                 "
               >
                 <Image
                   src={`${ICONS_URL}${toToken}.svg`}
                   alt={toToken}
-                  width={20}
-                  height={20}
+                  width={28}
+                  height={28}
                   className="shrink-0"
                   onError={(e) => {
                     e.currentTarget.src = "/warning.svg";
                   }}
                 />
-                <span className="text-white text-sm max-w-[110px] truncate">
+                <span className="text-white text-lg whitespace-nowrap">
                   {toToken || "Select"}
                 </span>
               </button>
 
-              {/* Animated TO dropdown */}
               <AnimatePresence>
                 {isToOpen && (
                   <motion.div
@@ -334,12 +320,12 @@ export default function PurpleGlassSwap() {
                     transition={{ duration: 0.2 }}
                     style={{ backgroundColor: "rgba(129, 90, 159)" }}
                     className="
-                      absolute right-0 mt-2
+                      absolute left-0 mt-2
                       backdrop-blur-2xl
                       backdrop-saturate-150
                       border border-white/10 rounded-xl shadow-xl
-                      z-50 min-w-[180px] max-h-40 overflow-y-auto
-                      custom-scrollbar p-2
+                      z-50 min-w-[200px] max-h-52 overflow-y-auto
+                      custom-scrollbar p-3
                     "
                   >
                     <input
@@ -348,9 +334,9 @@ export default function PurpleGlassSwap() {
                       value={toSearch}
                       onChange={(e) => setToSearch(e.target.value)}
                       className="
-                        w-full p-2 mb-2 rounded bg-white/20 text-white
+                        w-full p-3 mb-3 rounded bg-white/20 text-white
                         placeholder-gray-300 focus:outline-none
-                        focus:bg-white/30
+                        focus:bg-white/30 text-lg
                       "
                     />
                     {filteredToTokens.map((token) => (
@@ -358,21 +344,21 @@ export default function PurpleGlassSwap() {
                         key={token}
                         onClick={() => handleSelectTo(token)}
                         className="
-                          flex items-center w-full p-2
+                          flex items-center w-full p-3
                           rounded-lg hover:bg-white/30 transition-colors
                         "
                       >
                         <Image
                           src={`${ICONS_URL}${token}.svg`}
                           alt={token}
-                          width={20}
-                          height={20}
+                          width={28}
+                          height={28}
                           className="shrink-0"
                           onError={(e) => {
                             e.currentTarget.src = "/warning.svg";
                           }}
                         />
-                        <span className="ml-2 text-white text-sm max-w-[110px] truncate">
+                        <span className="ml-3 text-white text-lg whitespace-nowrap">
                           {token}
                         </span>
                       </button>
