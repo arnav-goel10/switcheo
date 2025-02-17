@@ -148,7 +148,7 @@ export default function PurpleGlassSwap() {
 
         {/* Swap Input */}
         <div className="space-y-3 mb-6">
-          <label className="text-gray-200 text-xl">Swap</label>
+          <label className="text-gray-200 text-xl">Send</label>
           <div
             className="
               flex items-center bg-white/10 rounded-xl px-6 py-5
@@ -267,7 +267,7 @@ export default function PurpleGlassSwap() {
 
         {/* Get Output */}
         <div className="space-y-3">
-          <label className="text-gray-200 text-xl">Get</label>
+          <label className="text-gray-200 text-xl">Receive</label>
           <div
             className="
               flex items-center bg-white/10 rounded-xl px-6 py-5
