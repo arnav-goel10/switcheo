@@ -146,7 +146,6 @@ export default function PurpleGlassSwap() {
           Currency Swap
         </h2>
 
-        {/* Swap Input */}
         <div className="space-y-3 mb-6">
           <label className="text-gray-200 text-xl">Send</label>
           <div
@@ -167,7 +166,7 @@ export default function PurpleGlassSwap() {
               "
               placeholder="0"
             />
-            {/* FROM dropdown button */}
+
             <div className="relative" ref={fromDropdownRef}>
               <button
                 onClick={() => {
@@ -255,7 +254,6 @@ export default function PurpleGlassSwap() {
           </div>
         </div>
 
-        {/* Swap Icon */}
         <motion.div
           animate={{ rotate: rotation }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -265,7 +263,6 @@ export default function PurpleGlassSwap() {
           <Repeat className="mx-auto text-gray-200" size={32} />
         </motion.div>
 
-        {/* Get Output */}
         <div className="space-y-3">
           <label className="text-gray-200 text-xl">Receive</label>
           <div
@@ -282,7 +279,7 @@ export default function PurpleGlassSwap() {
                 outline-none text-2xl max-w-[200px] mr-2
               "
             />
-            {/* TO dropdown button */}
+
             <div className="relative" ref={toDropdownRef}>
               <button
                 onClick={() => {
