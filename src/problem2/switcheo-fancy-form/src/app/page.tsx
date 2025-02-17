@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useTokenData } from "@/hooks/useTokenData";
 import { convertAmount } from "@/utils/convertAmount";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
@@ -9,6 +9,8 @@ import CurrencyInputGroup from "@/components/ui/CurrencyInputGroup";
 import SwapButton from "@/components/ui/SwapButton";
 import BackgroundShapes from "@/components/ui/BackgroundShapes";
 import SubmitButton from "@/components/ui/SubmitButton";
+import FlashMessage from "@/components/ui/FlashMessage";
+import { validateSwapInputs } from "@/utils/validateSwapInputs";
 
 export default function CurrencySwapForm() {
   const { tokens, prices } = useTokenData();
@@ -69,56 +71,36 @@ export default function CurrencySwapForm() {
   };
 
   const handleSubmit = () => {
-    if (parseFloat(amount.trim()) < 0) {
-      setError("Amount cannot be negative.");
+    const { valid, error: validationError } = validateSwapInputs(
+      amount,
+      fromToken,
+      toToken
+    );
+    if (!valid) {
+      setError(validationError || "Validation failed.");
       setSuccess("");
-
       setTimeout(() => {
         setError("");
       }, 3000);
-    } else if (parseFloat(amount.trim()) === 0) {
-      setError("Amount cannot be zero.");
-      setSuccess("");
-
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-    } else if (amount.trim() !== "" && fromToken && toToken) {
-      setAmount("");
-      setError("");
-      setSuccess("Swap successful!");
-
-      setTimeout(() => {
-        setSuccess("");
-      }, 3000);
-    } else {
-      setError("Please enter an amount.");
-      setSuccess("");
-
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      return;
     }
+    // If valid:
+    setAmount("");
+    setError("");
+    setSuccess("Swap successful!");
+    setTimeout(() => {
+      setSuccess("");
+    }, 3000);
   };
 
   return (
-    <div
-      className="
-        relative min-h-screen flex items-center justify-center
-        bg-gradient-to-br from-[#1b0125] via-[#2a003e] to-[#3c0055]
-        overflow-hidden
-      "
-    >
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1b0125] via-[#2a003e] to-[#3c0055] overflow-hidden">
       <BackgroundShapes />
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="
-          relative z-10 w-[460px] max-w-full
-          bg-white/10 backdrop-blur-xl backdrop-saturate-200
-          border border-white/10 rounded-3xl shadow-2xl p-8
-        "
+        className="relative z-10 w-[460px] max-w-full bg-white/10 backdrop-blur-xl backdrop-saturate-200 border border-white/10 rounded-3xl shadow-2xl p-8"
       >
         <h2 className="text-3xl text-white text-center font-semibold mb-8">
           Currency Swap
@@ -170,33 +152,8 @@ export default function CurrencySwapForm() {
 
         <SubmitButton onClick={handleSubmit} label="Submit" />
 
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ maxHeight: 0, opacity: 0 }}
-              animate={{ maxHeight: 50, opacity: 1 }}
-              exit={{ maxHeight: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="mt-4 overflow-hidden"
-            >
-              <div className="text-red-500 text-center">{error}</div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {success && (
-            <motion.div
-              initial={{ maxHeight: 0, opacity: 0 }}
-              animate={{ maxHeight: 50, opacity: 1 }}
-              exit={{ maxHeight: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="mt-4 overflow-hidden"
-            >
-              <div className="text-green-500 text-center">{success}</div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <FlashMessage message={error} type="error" />
+        <FlashMessage message={success} type="success" />
       </motion.div>
     </div>
   );
