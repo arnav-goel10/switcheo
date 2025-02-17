@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTokenData } from "./hooks/useTokenData";
-import { convertAmount } from "./utils/convertAmount";
-import { useOutsideClick } from "./hooks/useOutsideClick";
+import { useTokenData } from "@/hooks/useTokenData";
+import { convertAmount } from "@/utils/convertAmount";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 import CurrencyInputGroup from "@/components/ui/CurrencyInputGroup";
 import SwapButton from "@/components/ui/SwapButton";
 import BackgroundShapes from "@/components/ui/BackgroundShapes";
