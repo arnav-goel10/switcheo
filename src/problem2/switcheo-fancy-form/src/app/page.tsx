@@ -69,7 +69,21 @@ export default function CurrencySwapForm() {
   };
 
   const handleSubmit = () => {
-    if (amount.trim() !== "" && fromToken && toToken) {
+    if (parseFloat(amount.trim()) < 0) {
+      setError("Amount cannot be negative.");
+      setSuccess("");
+
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    } else if (parseFloat(amount.trim()) === 0) {
+      setError("Amount cannot be zero.");
+      setSuccess("");
+
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    } else if (amount.trim() !== "" && fromToken && toToken) {
       setAmount("");
       setError("");
       setSuccess("Swap successful!");
