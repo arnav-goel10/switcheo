@@ -147,7 +147,7 @@ export default function PurpleGlassSwap() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         className="
-          relative z-10 w-[400px] max-w-full
+          relative z-10 w-[420px] max-w-full
           bg-white/10 backdrop-blur-xl backdrop-saturate-200
           border border-white/10 rounded-3xl shadow-2xl p-8
         "
@@ -171,6 +171,10 @@ export default function PurpleGlassSwap() {
               className="
                 flex-1 bg-transparent text-white placeholder-gray-300
                 outline-none text-lg
+                /* Hide spin arrows (optional) */
+                [appearance:textfield]
+                [&::-webkit-inner-spin-button]:appearance-none
+                [&::-webkit-outer-spin-button]:appearance-none
               "
               placeholder="0.00"
             />
@@ -183,20 +187,23 @@ export default function PurpleGlassSwap() {
                 }}
                 className="
                   flex items-center space-x-2 bg-white/20
-                  px-3 py-2 rounded-lg focus:outline-none
+                  px-4 py-2 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
+                  w-[180px]   /* Increased width */
                 "
               >
-                {fromToken && (
-                  <Image
-                    src={`${ICONS_URL}${fromToken}.svg`}
-                    alt={fromToken}
-                    width={20}
-                    height={20}
-                    className="shrink-0"
-                  />
-                )}
-                <span className="text-white text-sm max-w-[150px] truncate">
+                <Image
+                  src={`${ICONS_URL}${fromToken}.svg`}
+                  alt={fromToken}
+                  width={20}
+                  height={20}
+                  className="shrink-0"
+                  onError={(e) => {
+                    e.currentTarget.src = "/warning.svg";
+                  }}
+                />
+                {/* Smaller text + bigger max-w to avoid truncation too soon */}
+                <span className="text-white text-sm max-w-[110px] truncate">
                   {fromToken || "Select"}
                 </span>
               </button>
@@ -213,7 +220,7 @@ export default function PurpleGlassSwap() {
                       absolute right-0 mt-2
                       bg-white/10 backdrop-blur-xl backdrop-saturate-200
                       border border-white/10 rounded-xl shadow-xl
-                      z-50 min-w-[150px] max-h-40 overflow-y-auto
+                      z-50 min-w-[180px] max-h-40 overflow-y-auto
                       custom-scrollbar p-2
                     "
                   >
@@ -243,8 +250,13 @@ export default function PurpleGlassSwap() {
                           width={20}
                           height={20}
                           className="shrink-0"
+                          onError={(e) => {
+                            e.currentTarget.src = "/warning.svg";
+                          }}
                         />
-                        <span className="ml-2 text-white text-sm">{token}</span>
+                        <span className="ml-2 text-white text-sm max-w-[110px] truncate">
+                          {token}
+                        </span>
                       </button>
                     ))}
                   </motion.div>
@@ -289,20 +301,22 @@ export default function PurpleGlassSwap() {
                 }}
                 className="
                   flex items-center space-x-2 bg-white/20
-                  px-3 py-2 rounded-lg focus:outline-none
+                  px-4 py-2 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
+                  w-[180px]   /* Increased width */
                 "
               >
-                {toToken && (
-                  <Image
-                    src={`${ICONS_URL}${toToken}.svg`}
-                    alt={toToken}
-                    width={20}
-                    height={20}
-                    className="shrink-0"
-                  />
-                )}
-                <span className="text-white text-sm max-w-[150px] truncate">
+                <Image
+                  src={`${ICONS_URL}${toToken}.svg`}
+                  alt={toToken}
+                  width={20}
+                  height={20}
+                  className="shrink-0"
+                  onError={(e) => {
+                    e.currentTarget.src = "/warning.svg";
+                  }}
+                />
+                <span className="text-white text-sm max-w-[110px] truncate">
                   {toToken || "Select"}
                 </span>
               </button>
@@ -319,7 +333,7 @@ export default function PurpleGlassSwap() {
                       absolute right-0 mt-2
                       bg-white/10 backdrop-blur-xl backdrop-saturate-200
                       border border-white/10 rounded-xl shadow-xl
-                      z-50 min-w-[150px] max-h-40 overflow-y-auto
+                      z-50 min-w-[180px] max-h-40 overflow-y-auto
                       custom-scrollbar p-2
                     "
                   >
@@ -349,8 +363,13 @@ export default function PurpleGlassSwap() {
                           width={20}
                           height={20}
                           className="shrink-0"
+                          onError={(e) => {
+                            e.currentTarget.src = "/warning.svg";
+                          }}
                         />
-                        <span className="ml-2 text-white text-sm">{token}</span>
+                        <span className="ml-2 text-white text-sm max-w-[110px] truncate">
+                          {token}
+                        </span>
                       </button>
                     ))}
                   </motion.div>
