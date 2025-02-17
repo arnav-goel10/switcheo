@@ -7,8 +7,9 @@ import { convertAmount } from "./utils/convertAmount";
 import { useOutsideClick } from "./hooks/useOutsideClick";
 import CurrencyInputGroup from "@/components/ui/CurrencyInputGroup";
 import SwapButton from "@/components/ui/SwapButton";
+import BackgroundShapes from "@/components/ui/BackgroundShapes";
 
-export default function PurpleGlassSwap() {
+export default function CurrencySwapForm() {
   const { tokens, prices } = useTokenData();
 
   const [fromToken, setFromToken] = useState("");
@@ -72,19 +73,7 @@ export default function PurpleGlassSwap() {
         overflow-hidden
       "
     >
-      <div
-        className="
-          absolute -top-40 -left-40 w-[500px] h-[500px]
-          bg-pink-500 rounded-full blur-3xl opacity-30
-        "
-      />
-      <div
-        className="
-          absolute bottom-[-150px] right-[-150px] w-[500px] h-[500px]
-          bg-purple-500 rounded-full blur-3xl opacity-30
-        "
-      />
-
+      <BackgroundShapes />
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -125,7 +114,6 @@ export default function PurpleGlassSwap() {
         <CurrencyInputGroup
           label="Receive"
           inputValue={convertedAmount.toFixed(6)}
-          // No onInputChange provided, so this input remains read-only
           token={toToken}
           tokens={tokens}
           isDropdownOpen={isToOpen}
