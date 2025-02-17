@@ -219,8 +219,7 @@ export default function PurpleGlassSwap() {
                     style={{ backgroundColor: "rgba(129, 90, 159)" }}
                     className="
                       absolute right-0 mt-2
-                    //   bg-white/40            /* More opaque background */
-                      backdrop-blur-2xl      /* Frosted effect behind text */
+                      backdrop-blur-2xl      
                       backdrop-saturate-150
                       border border-white/10 rounded-xl shadow-xl
                       z-50 min-w-[180px] max-h-40 overflow-y-auto
@@ -336,8 +335,7 @@ export default function PurpleGlassSwap() {
                     style={{ backgroundColor: "rgba(129, 90, 159)" }}
                     className="
                       absolute right-0 mt-2
-                    //   bg-white/30            /* More opaque background */
-                      backdrop-blur-2xl      /* Frosted effect behind text */
+                      backdrop-blur-2xl
                       backdrop-saturate-150
                       border border-white/10 rounded-xl shadow-xl
                       z-50 min-w-[180px] max-h-40 overflow-y-auto
