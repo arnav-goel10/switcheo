@@ -1,4 +1,3 @@
-// src/hooks/useOutsideClick.ts
 import { useEffect, RefObject } from "react";
 
 export const useOutsideClick = (
