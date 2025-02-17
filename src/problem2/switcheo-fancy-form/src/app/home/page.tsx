@@ -171,7 +171,7 @@ export default function PurpleGlassSwap() {
               className="
                 flex-1 bg-transparent text-white placeholder-gray-300
                 outline-none text-lg
-                /* Hide spin arrows (optional) */
+                /* Hide spin arrows */
                 [appearance:textfield]
                 [&::-webkit-inner-spin-button]:appearance-none
                 [&::-webkit-outer-spin-button]:appearance-none
@@ -189,7 +189,7 @@ export default function PurpleGlassSwap() {
                   flex items-center space-x-2 bg-white/20
                   px-4 py-2 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
-                  w-[180px]   /* Increased width */
+                  w-[100px]
                 "
               >
                 <Image
@@ -202,7 +202,6 @@ export default function PurpleGlassSwap() {
                     e.currentTarget.src = "/warning.svg";
                   }}
                 />
-                {/* Smaller text + bigger max-w to avoid truncation too soon */}
                 <span className="text-white text-sm max-w-[110px] truncate">
                   {fromToken || "Select"}
                 </span>
@@ -216,9 +215,12 @@ export default function PurpleGlassSwap() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -5 }}
                     transition={{ duration: 0.2 }}
+                    style={{ backgroundColor: "rgba(129, 90, 159)" }}
                     className="
                       absolute right-0 mt-2
-                      bg-white/10 backdrop-blur-xl backdrop-saturate-200
+                    //   bg-white/40            /* More opaque background */
+                      backdrop-blur-2xl      /* Frosted effect behind text */
+                      backdrop-saturate-150
                       border border-white/10 rounded-xl shadow-xl
                       z-50 min-w-[180px] max-h-40 overflow-y-auto
                       custom-scrollbar p-2
@@ -241,7 +243,7 @@ export default function PurpleGlassSwap() {
                         onClick={() => handleSelectFrom(token)}
                         className="
                           flex items-center w-full p-2
-                          rounded-lg hover:bg-white/20 transition-colors
+                          rounded-lg hover:bg-white/30 transition-colors
                         "
                       >
                         <Image
@@ -303,7 +305,7 @@ export default function PurpleGlassSwap() {
                   flex items-center space-x-2 bg-white/20
                   px-4 py-2 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
-                  w-[180px]   /* Increased width */
+                  w-[100px]
                 "
               >
                 <Image
@@ -329,9 +331,12 @@ export default function PurpleGlassSwap() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -5 }}
                     transition={{ duration: 0.2 }}
+                    style={{ backgroundColor: "rgba(129, 90, 159)" }}
                     className="
                       absolute right-0 mt-2
-                      bg-white/10 backdrop-blur-xl backdrop-saturate-200
+                    //   bg-white/30            /* More opaque background */
+                      backdrop-blur-2xl      /* Frosted effect behind text */
+                      backdrop-saturate-150
                       border border-white/10 rounded-xl shadow-xl
                       z-50 min-w-[180px] max-h-40 overflow-y-auto
                       custom-scrollbar p-2
@@ -354,7 +359,7 @@ export default function PurpleGlassSwap() {
                         onClick={() => handleSelectTo(token)}
                         className="
                           flex items-center w-full p-2
-                          rounded-lg hover:bg-white/20 transition-colors
+                          rounded-lg hover:bg-white/30 transition-colors
                         "
                       >
                         <Image
