@@ -14,7 +14,7 @@ const SwapButton: FC<SwapButtonProps> = ({ rotation, onClick }) => {
     <motion.div
       animate={{ rotate: rotation }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="cursor-pointer mb-6"
+      className="cursor-pointer mb-1"
       onClick={onClick}
     >
       <Repeat className="mx-auto text-gray-200" size={32} />
