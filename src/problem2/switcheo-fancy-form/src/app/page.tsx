@@ -1,17 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Repeat } from "lucide-react";
-import Image from "next/image";
-
-const API_URL = "https://interview.switcheo.com/prices.json";
-const ICONS_URL =
-  "https://raw.githubusercontent.com/Switcheo/token-icons/main/tokens/";
+import { motion } from "framer-motion";
+import { useTokenData } from "./hooks/useTokenData";
+import { convertAmount } from "./utils/convertAmount";
+import { useOutsideClick } from "./hooks/useOutsideClick";
+import CurrencyInputGroup from "@/components/ui/CurrencyInputGroup";
+import SwapButton from "@/components/ui/SwapButton";
 
 export default function PurpleGlassSwap() {
-  const [tokens, setTokens] = useState<string[]>([]);
-  const [prices, setPrices] = useState<{ [key: string]: number }>({});
+  const { tokens, prices } = useTokenData();
+
   const [fromToken, setFromToken] = useState("");
   const [toToken, setToToken] = useState("");
   const [amount, setAmount] = useState("");
@@ -27,24 +26,11 @@ export default function PurpleGlassSwap() {
   const toDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        const priceMap: { [key: string]: number } = {};
-        data.forEach((item: { currency: string; price: number }) => {
-          priceMap[item.currency] = item.price;
-        });
-        setPrices(priceMap);
-
-        const allTokens = Object.keys(priceMap);
-        setTokens(allTokens);
-
-        if (allTokens.length > 1) {
-          setFromToken(allTokens[0]);
-          setToToken(allTokens[1]);
-        }
-      });
-  }, []);
+    if (tokens.length > 1) {
+      if (!fromToken) setFromToken(tokens[0]);
+      if (!toToken) setToToken(tokens[1]);
+    }
+  }, [tokens, fromToken, toToken]);
 
   useEffect(() => {
     if (
@@ -55,33 +41,19 @@ export default function PurpleGlassSwap() {
       prices[toToken]
     ) {
       setConvertedAmount(
-        (parseFloat(amount) * prices[fromToken]) / prices[toToken]
+        convertAmount(parseFloat(amount), prices[fromToken], prices[toToken])
       );
     } else {
       setConvertedAmount(0);
     }
   }, [amount, fromToken, toToken, prices]);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        fromDropdownRef.current &&
-        !fromDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsFromOpen(false);
-      }
-      if (
-        toDropdownRef.current &&
-        !toDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsToOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(fromDropdownRef, () => {
+    setIsFromOpen(false);
+  });
+  useOutsideClick(toDropdownRef, () => {
+    setIsToOpen(false);
+  });
 
   const handleSwap = () => {
     setIsFromOpen(false);
@@ -91,25 +63,6 @@ export default function PurpleGlassSwap() {
     setToToken(oldFrom);
     setRotation((prev) => prev + 180);
   };
-
-  const handleSelectFrom = (token: string) => {
-    setFromToken(token);
-    setIsFromOpen(false);
-    setFromSearch("");
-  };
-
-  const handleSelectTo = (token: string) => {
-    setToToken(token);
-    setIsToOpen(false);
-    setToSearch("");
-  };
-
-  const filteredFromTokens = tokens.filter((token) =>
-    token.toLowerCase().includes(fromSearch.toLowerCase())
-  );
-  const filteredToTokens = tokens.filter((token) =>
-    token.toLowerCase().includes(toSearch.toLowerCase())
-  );
 
   return (
     <div
@@ -146,226 +99,50 @@ export default function PurpleGlassSwap() {
           Currency Swap
         </h2>
 
-        <div className="space-y-3 mb-6">
-          <label className="text-gray-200 text-xl">Send</label>
-          <div
-            className="
-              flex items-center bg-white/10 rounded-xl px-6 py-5
-            "
-          >
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="
-                flex-1 bg-transparent text-white placeholder-gray-300
-                outline-none text-2xl max-w-[200px]
-                [appearance:textfield] mr-2
-                [&::-webkit-inner-spin-button]:appearance-none
-                [&::-webkit-outer-spin-button]:appearance-none
-              "
-              placeholder="0"
-            />
+        <CurrencyInputGroup
+          label="Send"
+          inputValue={amount}
+          onInputChange={setAmount}
+          token={fromToken}
+          tokens={tokens}
+          isDropdownOpen={isFromOpen}
+          searchValue={fromSearch}
+          onDropdownToggle={() => {
+            setIsFromOpen((prev) => !prev);
+            setIsToOpen(false);
+          }}
+          onSearchChange={setFromSearch}
+          onSelectToken={(token) => {
+            setFromToken(token);
+            setIsFromOpen(false);
+            setFromSearch("");
+          }}
+          dropdownRef={fromDropdownRef}
+        />
 
-            <div className="relative" ref={fromDropdownRef}>
-              <button
-                onClick={() => {
-                  setIsFromOpen((prev) => !prev);
-                  setIsToOpen(false);
-                }}
-                className="
-                  flex items-center space-x-2 bg-white/20
-                  pr-5 pl-5 py-3 rounded-lg focus:outline-none
-                  hover:bg-white/30 transition-colors
-                  w-auto justify-center
-                "
-              >
-                <Image
-                  src={`${ICONS_URL}${fromToken}.svg`}
-                  alt={fromToken}
-                  width={28}
-                  height={28}
-                  className="shrink-0"
-                  onError={(e) => {
-                    e.currentTarget.src = "/warning.svg";
-                  }}
-                />
-                <span className="text-white text-lg whitespace-nowrap">
-                  {fromToken || "Select"}
-                </span>
-              </button>
+        <SwapButton rotation={rotation} onClick={handleSwap} />
 
-              <AnimatePresence>
-                {isFromOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: -5 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ backgroundColor: "rgba(129, 90, 159)" }}
-                    className="
-                      absolute left-0 mt-2
-                      backdrop-blur-2xl
-                      backdrop-saturate-150
-                      border border-white/10 rounded-xl shadow-xl
-                      z-50 min-w-[200px] max-h-52 overflow-y-auto
-                      custom-scrollbar p-3
-                    "
-                  >
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      value={fromSearch}
-                      onChange={(e) => setFromSearch(e.target.value)}
-                      className="
-                        w-full p-3 mb-3 rounded bg-white/20 text-white
-                        placeholder-gray-300 focus:outline-none
-                        focus:bg-white/30 text-lg
-                      "
-                    />
-                    {filteredFromTokens.map((token) => (
-                      <button
-                        key={token}
-                        onClick={() => handleSelectFrom(token)}
-                        className="
-                          flex items-center w-full p-3
-                          rounded-lg hover:bg-white/30 transition-colors
-                        "
-                      >
-                        <Image
-                          src={`${ICONS_URL}${token}.svg`}
-                          alt={token}
-                          width={28}
-                          height={28}
-                          className="shrink-0"
-                          onError={(e) => {
-                            e.currentTarget.src = "/warning.svg";
-                          }}
-                        />
-                        <span className="ml-3 text-white text-lg whitespace-nowrap">
-                          {token}
-                        </span>
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-
-        <motion.div
-          animate={{ rotate: rotation }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="cursor-pointer mb-6"
-          onClick={handleSwap}
-        >
-          <Repeat className="mx-auto text-gray-200" size={32} />
-        </motion.div>
-
-        <div className="space-y-3">
-          <label className="text-gray-200 text-xl">Receive</label>
-          <div
-            className="
-              flex items-center bg-white/10 rounded-xl px-6 py-5
-            "
-          >
-            <input
-              type="text"
-              value={convertedAmount.toFixed(6)}
-              readOnly
-              className="
-                flex-1 bg-transparent text-white
-                outline-none text-2xl max-w-[200px] mr-2
-              "
-            />
-
-            <div className="relative" ref={toDropdownRef}>
-              <button
-                onClick={() => {
-                  setIsToOpen((prev) => !prev);
-                  setIsFromOpen(false);
-                }}
-                className="
-                  flex items-center space-x-2 bg-white/20
-                  pr-5 pl-5 py-3 rounded-lg focus:outline-none
-                  hover:bg-white/30 transition-colors
-                  w-auto justify-center
-                "
-              >
-                <Image
-                  src={`${ICONS_URL}${toToken}.svg`}
-                  alt={toToken}
-                  width={28}
-                  height={28}
-                  className="shrink-0"
-                  onError={(e) => {
-                    e.currentTarget.src = "/warning.svg";
-                  }}
-                />
-                <span className="text-white text-lg whitespace-nowrap">
-                  {toToken || "Select"}
-                </span>
-              </button>
-
-              <AnimatePresence>
-                {isToOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: -5 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ backgroundColor: "rgba(129, 90, 159)" }}
-                    className="
-                      absolute left-0 mt-2
-                      backdrop-blur-2xl
-                      backdrop-saturate-150
-                      border border-white/10 rounded-xl shadow-xl
-                      z-50 min-w-[200px] max-h-52 overflow-y-auto
-                      custom-scrollbar p-3
-                    "
-                  >
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      value={toSearch}
-                      onChange={(e) => setToSearch(e.target.value)}
-                      className="
-                        w-full p-3 mb-3 rounded bg-white/20 text-white
-                        placeholder-gray-300 focus:outline-none
-                        focus:bg-white/30 text-lg
-                      "
-                    />
-                    {filteredToTokens.map((token) => (
-                      <button
-                        key={token}
-                        onClick={() => handleSelectTo(token)}
-                        className="
-                          flex items-center w-full p-3
-                          rounded-lg hover:bg-white/30 transition-colors
-                        "
-                      >
-                        <Image
-                          src={`${ICONS_URL}${token}.svg`}
-                          alt={token}
-                          width={28}
-                          height={28}
-                          className="shrink-0"
-                          onError={(e) => {
-                            e.currentTarget.src = "/warning.svg";
-                          }}
-                        />
-                        <span className="ml-3 text-white text-lg whitespace-nowrap">
-                          {token}
-                        </span>
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
+        <CurrencyInputGroup
+          label="Receive"
+          inputValue={convertedAmount.toFixed(6)}
+          // No onInputChange provided, so this input remains read-only
+          token={toToken}
+          tokens={tokens}
+          isDropdownOpen={isToOpen}
+          searchValue={toSearch}
+          onDropdownToggle={() => {
+            setIsToOpen((prev) => !prev);
+            setIsFromOpen(false);
+          }}
+          onSearchChange={setToSearch}
+          onSelectToken={(token) => {
+            setToToken(token);
+            setIsToOpen(false);
+            setToSearch("");
+          }}
+          dropdownRef={toDropdownRef}
+          readOnly={true}
+        />
       </motion.div>
     </div>
   );
