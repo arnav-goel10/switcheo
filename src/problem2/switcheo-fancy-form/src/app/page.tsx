@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTokenData } from "./hooks/useTokenData";
 import { convertAmount } from "./utils/convertAmount";
 import { useOutsideClick } from "./hooks/useOutsideClick";
@@ -73,14 +73,18 @@ export default function CurrencySwapForm() {
       setAmount("");
       setError("");
       setSuccess("Swap successful!");
+
+      setTimeout(() => {
+        setSuccess("");
+      }, 3000);
     } else {
       setError("Please enter an amount.");
       setSuccess("");
+
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
-    setTimeout(() => {
-      setSuccess("");
-      setError("");
-    }, 3000);
   };
 
   return (
@@ -152,25 +156,33 @@ export default function CurrencySwapForm() {
 
         <SubmitButton onClick={handleSubmit} label="Submit" />
 
-        {error && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-4 text-red-500 text-center"
-          >
-            {error}
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ maxHeight: 0, opacity: 0 }}
+              animate={{ maxHeight: 50, opacity: 1 }}
+              exit={{ maxHeight: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="mt-4 overflow-hidden"
+            >
+              <div className="text-red-500 text-center">{error}</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {success && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-4 text-green-500 text-center"
-          >
-            {success}
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {success && (
+            <motion.div
+              initial={{ maxHeight: 0, opacity: 0 }}
+              animate={{ maxHeight: 50, opacity: 1 }}
+              exit={{ maxHeight: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="mt-4 overflow-hidden"
+            >
+              <div className="text-green-500 text-center">{success}</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );
