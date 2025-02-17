@@ -18,6 +18,7 @@ export default function PurpleGlassSwap() {
   const [toToken, setToToken] = useState("");
   const [amount, setAmount] = useState("");
   const [convertedAmount, setConvertedAmount] = useState(0);
+  const [rotation, setRotation] = useState(0); // new state for rotation
 
   // Dropdown states
   const [isFromOpen, setIsFromOpen] = useState(false);
@@ -89,13 +90,14 @@ export default function PurpleGlassSwap() {
     };
   }, []);
 
-  // Swap tokens
+  // Swap tokens and update rotation state
   const handleSwap = () => {
     setIsFromOpen(false);
     setIsToOpen(false);
     const oldFrom = fromToken;
     setFromToken(toToken);
     setToToken(oldFrom);
+    setRotation((prev) => prev + 180);
   };
 
   // Handlers for selecting tokens
@@ -171,7 +173,6 @@ export default function PurpleGlassSwap() {
               className="
                 flex-1 bg-transparent text-white placeholder-gray-300
                 outline-none text-lg
-                /* Hide spin arrows */
                 [appearance:textfield]
                 [&::-webkit-inner-spin-button]:appearance-none
                 [&::-webkit-outer-spin-button]:appearance-none
@@ -268,9 +269,10 @@ export default function PurpleGlassSwap() {
           </div>
         </div>
 
-        {/* Swap Icon */}
+        {/* Swap Icon with smoother 180° spin animation */}
         <motion.div
-          whileTap={{ rotate: 180 }}
+          animate={{ rotate: rotation }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="cursor-pointer mb-4"
           onClick={handleSwap}
         >
