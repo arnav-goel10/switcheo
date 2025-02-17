@@ -176,9 +176,9 @@ export default function PurpleGlassSwap() {
                 }}
                 className="
                   flex items-center space-x-2 bg-white/20
-                  pr-10 pl-3 py-3 rounded-lg focus:outline-none
+                  pr-5 pl-5 py-3 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
-                  w-auto
+                  w-auto justify-center
                 "
               >
                 <Image
@@ -291,9 +291,9 @@ export default function PurpleGlassSwap() {
                 }}
                 className="
                   flex items-center space-x-2 bg-white/20
-                  pr-10 pl-3 py-3 rounded-lg focus:outline-none
+                  pr-5 pl-5 py-3 rounded-lg focus:outline-none
                   hover:bg-white/30 transition-colors
-                  w-auto
+                  w-auto justify-center
                 "
               >
                 <Image
