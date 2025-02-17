@@ -37,7 +37,7 @@ const CurrencyInputGroup: React.FC<CurrencyInputGroupProps> = ({
       <label className="text-gray-200 text-xl">{label}</label>
       <div className="flex items-center bg-white/10 rounded-xl px-6 py-5">
         <input
-          type="text"
+          type={onInputChange ? "number" : "text"}
           value={inputValue}
           onChange={(e) => onInputChange && onInputChange(e.target.value)}
           readOnly={readOnly}

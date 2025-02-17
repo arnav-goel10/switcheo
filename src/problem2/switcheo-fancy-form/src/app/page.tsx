@@ -8,6 +8,7 @@ import { useOutsideClick } from "./hooks/useOutsideClick";
 import CurrencyInputGroup from "@/components/ui/CurrencyInputGroup";
 import SwapButton from "@/components/ui/SwapButton";
 import BackgroundShapes from "@/components/ui/BackgroundShapes";
+import SubmitButton from "@/components/ui/SubmitButton";
 
 export default function CurrencySwapForm() {
   const { tokens, prices } = useTokenData();
@@ -17,6 +18,8 @@ export default function CurrencySwapForm() {
   const [amount, setAmount] = useState("");
   const [convertedAmount, setConvertedAmount] = useState(0);
   const [rotation, setRotation] = useState(0);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const [isFromOpen, setIsFromOpen] = useState(false);
   const [isToOpen, setIsToOpen] = useState(false);
@@ -63,6 +66,21 @@ export default function CurrencySwapForm() {
     setFromToken(toToken);
     setToToken(oldFrom);
     setRotation((prev) => prev + 180);
+  };
+
+  const handleSubmit = () => {
+    if (amount.trim() !== "" && fromToken && toToken) {
+      setAmount("");
+      setError("");
+      setSuccess("Swap successful!");
+    } else {
+      setError("Please enter an amount.");
+      setSuccess("");
+    }
+    setTimeout(() => {
+      setSuccess("");
+      setError("");
+    }, 3000);
   };
 
   return (
@@ -113,7 +131,7 @@ export default function CurrencySwapForm() {
 
         <CurrencyInputGroup
           label="Receive"
-          inputValue={convertedAmount.toFixed(6)}
+          inputValue={parseFloat(convertedAmount.toFixed(8)).toString()}
           token={toToken}
           tokens={tokens}
           isDropdownOpen={isToOpen}
@@ -131,6 +149,28 @@ export default function CurrencySwapForm() {
           dropdownRef={toDropdownRef}
           readOnly={true}
         />
+
+        <SubmitButton onClick={handleSubmit} label="Submit" />
+
+        {error && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-4 text-red-500 text-center"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {success && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-4 text-green-500 text-center"
+          >
+            {success}
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );
