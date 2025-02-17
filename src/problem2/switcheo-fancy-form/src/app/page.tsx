@@ -160,7 +160,7 @@ export default function PurpleGlassSwap() {
               onChange={(e) => setAmount(e.target.value)}
               className="
                 flex-1 bg-transparent text-white placeholder-gray-300
-                outline-none text-2xl
+                outline-none text-2xl max-w-[200px]
                 [appearance:textfield]
                 [&::-webkit-inner-spin-button]:appearance-none
                 [&::-webkit-outer-spin-button]:appearance-none
@@ -168,7 +168,7 @@ export default function PurpleGlassSwap() {
               placeholder="0.00"
             />
             {/* FROM dropdown button */}
-            <div className="relative ml-2" ref={fromDropdownRef}>
+            <div className="relative" ref={fromDropdownRef}>
               <button
                 onClick={() => {
                   setIsFromOpen((prev) => !prev);
@@ -279,11 +279,11 @@ export default function PurpleGlassSwap() {
               readOnly
               className="
                 flex-1 bg-transparent text-white
-                outline-none text-2xl
+                outline-none text-2xl max-w-[200px]
               "
             />
             {/* TO dropdown button */}
-            <div className="relative ml-2" ref={toDropdownRef}>
+            <div className="relative" ref={toDropdownRef}>
               <button
                 onClick={() => {
                   setIsToOpen((prev) => !prev);
