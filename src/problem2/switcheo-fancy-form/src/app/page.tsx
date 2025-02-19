@@ -84,7 +84,7 @@ export default function CurrencySwapForm() {
       }, 3000);
       return;
     }
-    // If valid:
+
     setAmount("");
     setError("");
     setSuccess("Swap successful!");
