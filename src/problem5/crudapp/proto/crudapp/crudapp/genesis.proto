@@ -1,0 +1,17 @@
+syntax = "proto3";
+package crudapp.crudapp;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "crudapp/crudapp/params.proto";
+
+option go_package = "crudapp/x/crudapp/types";
+
+// GenesisState defines the crudapp module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

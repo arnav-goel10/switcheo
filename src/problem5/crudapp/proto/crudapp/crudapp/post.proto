@@ -1,0 +1,12 @@
+syntax = "proto3";
+package crudapp.crudapp;
+
+option go_package = "crudapp/x/crudapp/types";
+
+message Post {
+  
+  string title = 1; 
+  string body = 2; 
+  string creator = 3; 
+  uint64 id = 4; 
+}
