@@ -4,7 +4,7 @@ Breaking consensus means that the blockchain network no longer agrees on a singl
 
 # b. Explain why your change would break the consensus.
 
-Our proposed change appends the block's timestamp to a post's title during an update. Although the timestamp is part of the block header and is deterministic within a block, the change is non-backward-compatible:
+My proposed change appends the block's timestamp to a post's title during an update. Although the timestamp is part of the block header and is deterministic within a block, the change is non-backward-compatible:
 
 - **Different Rule Application:**  
   Nodes running the updated software will append the timestamp to the title, while nodes running the old software will not. This difference means that the same transaction produces different outcomes depending on the node's software version.
