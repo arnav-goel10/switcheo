@@ -1,51 +1,16 @@
-# crudapp
-**crudapp** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
+# a. Explain what does it mean by breaking consensus.
 
-## Get started
+Breaking consensus means that the blockchain network no longer agrees on a single, unified state because nodes process transactions (and other state transitions) using different rules. In a blockchain, consensus ensures that every node, given the same input (transactions, block data, etc.), deterministically arrives at the same ledger state. A consensus-breaking change requires everyone to upgrade their software client, if not, nodes running different versions will produce divergent ledger states, leading to a network fork.
 
-```
-ignite chain serve
-```
+# b. Explain why your change would break the consensus.
 
-`serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
+Our proposed change appends the block's timestamp to a post's title during an update. Although the timestamp is part of the block header and is deterministic within a block, the change is non-backward-compatible:
 
-### Configure
+- **Different Rule Application:**  
+  Nodes running the updated software will append the timestamp to the title, while nodes running the old software will not. This difference means that the same transaction produces different outcomes depending on the node's software version.
 
-Your blockchain in development can be configured with `config.yml`. To learn more, see the [Ignite CLI docs](https://docs.ignite.com).
+- **Requirement for Universal Upgrade:**  
+  To maintain consensus, every node must use the same transaction processing rules. Since this change forces nodes to update their software, failing to do so results in divergent states across the network.
 
-### Web Frontend
-
-Additionally, Ignite CLI offers both Vue and React options for frontend scaffolding:
-
-For a Vue frontend, use: `ignite scaffold vue`
-For a React frontend, use: `ignite scaffold react`
-These commands can be run within your scaffolded blockchain project. 
-
-
-For more information see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
-
-## Release
-To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
-
-```
-git tag v0.1
-git push origin v0.1
-```
-
-After a draft release is created, make your final changes from the release page and publish it.
-
-### Install
-To install the latest version of your blockchain node's binary, execute the following command on your machine:
-
-```
-curl https://get.ignite.com/username/crudapp@latest! | sudo bash
-```
-`username/crudapp` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
-
-## Learn more
-
-- [Ignite CLI](https://ignite.com/cli)
-- [Tutorials](https://docs.ignite.com/guide)
-- [Ignite CLI docs](https://docs.ignite.com)
-- [Cosmos SDK docs](https://docs.cosmos.network)
-- [Developer Chat](https://discord.gg/ignite)
+- **Resulting Ledger Divergence:**  
+  When some nodes apply the new rule and others do not, the ledger state diverges, breaking consensus and potentially leading to a network fork where multiple versions of the ledger exist concurrently.

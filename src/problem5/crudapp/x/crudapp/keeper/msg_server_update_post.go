@@ -13,10 +13,12 @@ import (
 func (k msgServer) UpdatePost(goCtx context.Context, msg *types.MsgUpdatePost) (*types.MsgUpdatePostResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	timestamp := ctx.BlockTime().Format(time.RFC3339)
+
 	var post = types.Post{
 		Creator: msg.Creator,
 		Id:      msg.Id,
-		Title:   msg.Title,
+		Title:   msg.Title + " - Edited at " + timestamp,
 		Body:    msg.Body,
 	}
 
